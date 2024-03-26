@@ -3,49 +3,53 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Localiza extends JFrame {
-
-    // Componentes
-    private JButton btnProcurar;
-    private JButton btnCancelar;
-    private JTextField txtField;
-    private JTextArea txtArea;
-    private JScrollPane scrlPane;
+    private JComboBox<String> comboBox;
+    private JButton btnOk, btnCancelar;
     private Insere insere;
 
-    public Localiza(Insere insere){
-        super("Procurar Texto");
+    public Localiza(Insere insere) {
+        super("Localizar Texto");
         setSize(400, 200);
-
         this.insere = insere;
 
-        this.setLocationRelativeTo(null); // Centraliza a janela na tela
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha o programa ao fechar a janela
+        this.setLocationRelativeTo(null); // Janela fica centralizada no centro da tela
 
-        txtField = new JTextField(20);
-        txtField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                procurarTexto();
+        // Criando JComboBox
+        comboBox = new JComboBox<>();
+        comboBox.setEditable(true); // Permite a entrada do usuário
+
+        // Adicionando KeyListener
+        comboBox.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String texto = (String) comboBox.getSelectedItem();
+                    if (texto != null && !texto.isEmpty()) {
+                        if (insere.getTxtArea().getText().contains(texto)) {
+                            comboBox.addItem(texto);
+                        }
+                        comboBox.setSelectedItem("");
+                    }
+                }
             }
         });
 
-        txtArea = new JTextArea(10, 20);
-        txtArea.setEditable(false);
-
-        scrlPane = new JScrollPane(txtArea);
-        scrlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-        btnProcurar = new JButton("OK");
-        btnProcurar.setMnemonic('O');
-        btnProcurar.addActionListener(new ActionListener() {
+        // Criando JButton Ok
+        btnOk = new JButton("Ok");
+        btnOk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                procurarTexto();
+                String texto = (String) comboBox.getSelectedItem();
+                if (texto != null && !texto.isEmpty()) {
+                    if (insere.getTxtArea().getText().contains(texto)) {
+                        comboBox.addItem(texto);
+                    }
+                    comboBox.setSelectedItem("");
+                }
             }
         });
 
+        // Criando JButton Cancelar
         btnCancelar = new JButton("Cancelar");
-        btnCancelar.setMnemonic('C');
         btnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -53,28 +57,17 @@ public class Localiza extends JFrame {
             }
         });
 
-        // Cria container
-        JPanel pnl = new JPanel();
-        pnl.add(btnProcurar);
-        pnl.add(btnCancelar);
-        pnl.add(txtField);
+        // Criando painel para botões
+        JPanel pnlBotoes = new JPanel();
+        pnlBotoes.add(btnOk);
+        pnlBotoes.add(btnCancelar);
 
-        this.getContentPane().add(pnl, BorderLayout.SOUTH);
-        this.getContentPane().add(scrlPane, BorderLayout.CENTER);
-    }
+        // Criando painel para combobox
+        JPanel pnlTexto = new JPanel();
+        pnlTexto.add(new JLabel("Localiza:"));
+        pnlTexto.add(comboBox);
 
-    private void procurarTexto() {
-        String textoProcurado = txtField.getText();
-        String textoArea = insere.getTxtArea().getText();
-    
-        String[] sentences = textoArea.split("\\."); // Divide o texto em frases
-    
-        for (String sentence : sentences) {
-            if (sentence.contains(textoProcurado)) { // Se a frase contém o texto procurado
-                txtArea.append(sentence.trim() + ".\n"); // Adiciona a frase à área de texto
-            }
-        }
-    
-        txtField.setText("");
+        this.getContentPane().add(pnlTexto, BorderLayout.CENTER);
+        this.getContentPane().add(pnlBotoes, BorderLayout.SOUTH);
     }
 }
