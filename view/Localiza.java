@@ -1,73 +1,81 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 
-public class Localiza extends JFrame {
-    private JComboBox<String> comboBox;
-    private JButton btnOk, btnCancelar;
-    private Insere insere;
+public class Localiza extends JFrame implements ActionListener {
 
-    public Localiza(Insere insere) {
-        super("Localizar Texto");
-        setSize(400, 200);
-        this.insere = insere;
+    private JComboBox<String> txtPesquisa;
+    private JButton btnPesquisa;
+    private JButton btnCancelar;
+    private JTextArea textArea;
+    private Highlighter highlighter;
 
-        this.setLocationRelativeTo(null); // Janela fica centralizada no centro da tela
+    public Localiza(JTextArea textArea) {
+        super("Localizar");
 
-        // Criando JComboBox
-        comboBox = new JComboBox<>();
-        comboBox.setEditable(true); // Permite a entrada do usuário
+        this.textArea = textArea;
 
-        // Adicionando KeyListener
-        comboBox.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String texto = (String) comboBox.getSelectedItem();
-                    if (texto != null && !texto.isEmpty()) {
-                        if (insere.getTxtArea().getText().contains(texto)) {
-                            comboBox.addItem(texto);
-                        }
-                        comboBox.setSelectedItem("");
-                    }
-                }
-            }
-        });
-
-        // Criando JButton Ok
-        btnOk = new JButton("Ok");
-        btnOk.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String texto = (String) comboBox.getSelectedItem();
-                if (texto != null && !texto.isEmpty()) {
-                    if (insere.getTxtArea().getText().contains(texto)) {
-                        comboBox.addItem(texto);
-                    }
-                    comboBox.setSelectedItem("");
-                }
-            }
-        });
-
-        // Criando JButton Cancelar
+        // Inicializa os componentes
+        txtPesquisa = new JComboBox<>();
+        txtPesquisa.addItem("............");
+        txtPesquisa.setEditable(true);
+        btnPesquisa = new JButton("Buscar");
         btnCancelar = new JButton("Cancelar");
-        btnCancelar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
+        JLabel lblTexto = new JLabel("Localizar:");
+
+        btnPesquisa.addActionListener(this);
+        btnCancelar.addActionListener(this);
+
+        setLayout(new BorderLayout());
+
+        JPanel pnlButton = new JPanel();
+        pnlButton.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        pnlButton.add(btnCancelar);
+        pnlButton.add(btnPesquisa);
+
+        JPanel pnlField = new JPanel();
+        pnlField.setLayout(new FlowLayout());
+
+        pnlField.add(lblTexto);
+        pnlField.add(txtPesquisa);
+
+        add(pnlField, BorderLayout.NORTH);
+        add(pnlButton, BorderLayout.CENTER);
+
+        // Define o tamanho do JFrame
+        setSize(300, 120);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        setVisible(true);
+
+        // Inicializa o highlighter
+        highlighter = textArea.getHighlighter();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnCancelar) {
+            this.dispose();
+        } else if (e.getSource() == btnPesquisa) {
+            String pesquisaPal = txtPesquisa.getSelectedItem().toString();
+            String textoCompleto = textArea.getText();
+            int posInicial = textoCompleto.indexOf(pesquisaPal);
+            if (posInicial >= 0) {
+                try {
+                    highlighter.removeAllHighlights();
+                    highlighter.addHighlight(posInicial, posInicial + pesquisaPal.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.RED));
+                } catch (BadLocationException ex) {
+                    ex.printStackTrace();
+                }
             }
-        });
-
-        // Criando painel para botões
-        JPanel pnlBotoes = new JPanel();
-        pnlBotoes.add(btnOk);
-        pnlBotoes.add(btnCancelar);
-
-        // Criando painel para combobox
-        JPanel pnlTexto = new JPanel();
-        pnlTexto.add(new JLabel("Localiza:"));
-        pnlTexto.add(comboBox);
-
-        this.getContentPane().add(pnlTexto, BorderLayout.CENTER);
-        this.getContentPane().add(pnlBotoes, BorderLayout.SOUTH);
+        }
     }
 }
