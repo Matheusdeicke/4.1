@@ -12,14 +12,14 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
     public Insere(){
         super("Teste JTextArea e JTextField");
         
-        // instanciando campo de texto
+        // Instanciando campo de texto
         txtArea = new JTextArea();
         txtArea.addKeyListener(this);
 
-        // instanciando o JScrollPane e adicionando o JTextArea
+        // Instanciando o JScrollPane e adicionando o JTextArea
         scrollPane = new JScrollPane(txtArea);
 
-        // instanciando botão
+        // Instanciando botão
         btnInserir = new JButton("Insere linha");
         btnInserir.addActionListener(this);
 
@@ -27,20 +27,20 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
         txtField = new JTextField(20);
         txtField.addKeyListener(this);
 
-        // add o botão e input
+        // Adicionando o botão e input
         JPanel pnl = new JPanel();
         pnl.setLayout(new FlowLayout(FlowLayout.CENTER));
         pnl.add(btnInserir);
         pnl.add(txtField);
 
-        // add componentes no JFrame
+        // Adicionando componentes no JFrame
         this.add(scrollPane, BorderLayout.CENTER);
         this.add(pnl, BorderLayout.SOUTH);
 
-        // define o tamanho do JFrame
+        // Definindo o tamanho do JFrame
         setSize(500, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ao fechar a janela o programa encerra
+        setLocationRelativeTo(null); // O programa abre no centro da tela
         setVisible(true);
     }
 
