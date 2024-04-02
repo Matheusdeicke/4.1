@@ -11,7 +11,8 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
     private JFrame Frame;
     private String nomeUsuario;
     private int cont;
-  
+
+
     public Insere(String nomeUsuario){
 
         super(nomeUsuario);
@@ -72,17 +73,21 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             adicionarTexto();
-        } else if (e.getKeyCode() == KeyEvent.VK_F && e.isControlDown()) {
-            
-                Localiza l = new Localiza(Frame);
-                l.setVisible(true);
 
-                //para ilustrar (tem que estar dentro do frmPesquisa)
-                //txtTexto.append(str); // para adicionar texto ao final                            
+        } else if (e.getKeyCode() == KeyEvent.VK_F && e.isControlDown()) {
+
+            Localiza l = new Localiza(Frame);
+            l.setVisible(true);
+            
+        } else if (e.getKeyCode() == KeyEvent.VK_S && e.isControlDown()){
+            Salva s = new Salva();
+            s.salvarNoTxt(txtArea.getText());
+
         }
 
     }
-
+    
+    
 private class AcoesBotao implements ActionListener{
     public void actionPerformed(ActionEvent e){
         cont++;
