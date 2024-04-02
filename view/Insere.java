@@ -8,9 +8,14 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
     private JTextField txtField;
     private JTextArea txtArea;
     private JScrollPane scrollPane;
+    private String nomeUsuario;
   
-    public Insere(){
-        super("Teste JTextArea e JTextField");
+    public Insere(String nomeUsuario){
+
+        super(nomeUsuario);
+        this.nomeUsuario = nomeUsuario;
+
+        setTitle(nomeUsuario);
         
         // Instanciando campo de texto
         txtArea = new JTextArea();
@@ -82,4 +87,7 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
     public void keyReleased(KeyEvent e) {
     }
 
+    public static String solicitaNome(){
+        return JOptionPane.showInputDialog(null, "Qual é o seu nome?");
+    }
 }
