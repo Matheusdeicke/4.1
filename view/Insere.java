@@ -8,7 +8,9 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
     private JTextField txtField;
     private JTextArea txtArea;
     private JScrollPane scrollPane;
+    private JFrame Frame;
     private String nomeUsuario;
+    private int cont;
   
     public Insere(String nomeUsuario){
 
@@ -17,9 +19,12 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
 
         setTitle(nomeUsuario);
         
+        this.Frame = new JFrame();
+        
         // Instanciando campo de texto
         txtArea = new JTextArea();
         txtArea.addKeyListener(this);
+        // this.Frame.add(txtArea);
 
         // Instanciando o JScrollPane e adicionando o JTextArea
         scrollPane = new JScrollPane(txtArea);
@@ -53,6 +58,8 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnInserir) {
             adicionarTexto();
+            AcoesBotao acao = new AcoesBotao();
+            acao.actionPerformed(e);
         }
     }
 
@@ -67,7 +74,7 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
             adicionarTexto();
         } else if (e.getKeyCode() == KeyEvent.VK_F && e.isControlDown()) {
             
-                Localiza l = new Localiza(txtArea);
+                Localiza l = new Localiza(Frame);
                 l.setVisible(true);
 
                 //para ilustrar (tem que estar dentro do frmPesquisa)
@@ -75,6 +82,13 @@ public class Insere extends JFrame implements ActionListener, KeyListener{
         }
 
     }
+
+private class AcoesBotao implements ActionListener{
+    public void actionPerformed(ActionEvent e){
+        cont++;
+        txtArea.setText("Total de cliques no button:" + cont);
+    }
+}
 
     private void adicionarTexto() {
         String newLine = txtField.getText();

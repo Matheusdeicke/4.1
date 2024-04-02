@@ -8,7 +8,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
-public class Localiza extends JFrame implements ActionListener {
+public class Localiza extends JDialog implements ActionListener {
 
     private JComboBox<String> txtPesquisa;
     private JButton btnPesquisa;
@@ -16,10 +16,10 @@ public class Localiza extends JFrame implements ActionListener {
     private JTextArea textArea;
     private Highlighter highlighter;
 
-    public Localiza(JTextArea textArea) {
-        super("Localizar");
+    public Localiza(JFrame textArea) {
+        super(textArea, "Localiza");
 
-        this.textArea = textArea;
+        this.setModal(true);
 
         // Inicializa os componentes
         txtPesquisa = new JComboBox<>();
@@ -57,17 +57,21 @@ public class Localiza extends JFrame implements ActionListener {
         setVisible(true);
 
         // Inicializa o highlighter
-        highlighter = textArea.getHighlighter();
+        // highlighter = textArea.getHighlighter();
+        
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if (e.getSource() == btnCancelar) {
             this.dispose();
+            
         } else if (e.getSource() == btnPesquisa) {
             String pesquisaPal = txtPesquisa.getSelectedItem().toString();
             String textoCompleto = textArea.getText();
             int posInicial = textoCompleto.indexOf(pesquisaPal);
+            
             if (posInicial >= 0) {
                 try {
                     highlighter.removeAllHighlights();
