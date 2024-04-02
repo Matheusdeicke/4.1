@@ -1,2 +1,2 @@
 # Ex4.1
- Exercicio Java Insere e Lozaliza (JTextField e JTextArea)
+ Exercicio Java Insere e Localiza (JTextField e JTextArea)
